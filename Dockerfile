@@ -9,7 +9,7 @@ RUN go mod download
 COPY . .
 
 # Building app
-RUN cd cmd/api && CGO_ENABLED=0 GOOS=linux go build -o api
+RUN cd cmd/app && CGO_ENABLED=0 GOOS=linux go build -o app
 
 # Final stage
 FROM alpine:3.18 as runner
@@ -36,11 +36,11 @@ ENV PORT=8080
 # Tạo thư mục config nếu chưa tồn tại
 RUN mkdir -p /app/config
 
-COPY --from=builder /app/cmd/api/api /app/
+COPY --from=builder /app/cmd/app/app /app/
 
 WORKDIR /app
 
 EXPOSE 8080
 
 # Run the web service on container startup.
-CMD ["/app/api"]
+CMD ["/app/app"]

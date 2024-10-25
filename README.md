@@ -19,7 +19,11 @@ go run ./cmd/migration/main.go -dir migrations up
 ### Deployment
 #### Koyeb
 ```bash
-koyeb app init cortico --git github.com/wawandco/cortico --git-branch main --git-builder docker --instance-type free 
+# create service
+koyeb app init shortener --git github.com/taintpro98/golang-url-shortener --git-branch main --git-builder docker --instance-type free 
+
+# create database
+koyeb database create shortener-db --app shortener --instance-type free --pg-version 16 --region was
 ```
 
 ### Reference
