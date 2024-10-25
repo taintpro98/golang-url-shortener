@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: url-shortener-database
+    image: postgres:14.1
+    restart: unless-stopped
+    volumes:
+      # - ./docker/postgres-data/:/var/lib/postgresql/data
+      - url-shorten-database:/var/lib/postgres
+      - ./docker/postgres-data:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: url-database
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - 5433:5432
+    networks:
+      - url-shorten-network
+
+networks:
+  url-shorten-network:
+    driver: bridge
+
+volumes:
+  url-shorten-database:
+    driver: local
