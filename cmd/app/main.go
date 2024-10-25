@@ -20,7 +20,7 @@ import (
 var ConnectionModule = fx.Module(
 	"connection",
 	fx.Provide(
-		database.NewPostgresqlDatabase,
+		database.PostgresqlDatabaseProvider,
 	),
 )
 

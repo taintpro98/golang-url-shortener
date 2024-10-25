@@ -5,12 +5,22 @@ import (
 	"golang-url-shortener/config"
 	"os"
 
+	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
+
+func PostgresqlDatabaseProvider() (*gorm.DB, error) {
+	db, err := NewPostgresqlDatabase()
+	if err != nil {
+		log.Error().Err(err).Msg("connect to database error")
+		return nil, err
+	}
+	return db, nil
+}
 
 func NewPostgresqlDatabase() (*gorm.DB, error) {
 	dbConfig := config.DatabaseConfig{
@@ -20,6 +30,7 @@ func NewPostgresqlDatabase() (*gorm.DB, error) {
 		Password:     os.Getenv("POSTGRES_PASSWORD"),
 		Port:         os.Getenv("POSTGRES_PORT"),
 	}
+	fmt.Println("host", os.Getenv("POSTGRES_HOST"))
 	dsn := GetDatabaseDSN(dbConfig)
 	customLogger := NewCustomLogger(dbLoggerConfig{
 		ignoreRecordNotFoundError: false,
