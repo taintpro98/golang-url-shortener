@@ -4,11 +4,6 @@ go mod init blockchain-newsfeed-server
 ```
 
 ### Docker
-- Remove containers not in the file docker-compose.dev.yml
-  ```
-  docker-compose -f docker-compose.dev.yml up --build -d --remove-orphans 
-  ```
-
 ### Migrations
 ```sql
 go run ./cmd/migration/main.go -dir migrations create ${FILE_NAME} sql
@@ -17,16 +12,17 @@ go run ./cmd/migration/main.go -dir migrations up
 
 ### Containerization
 ```bash
+# Remove containers not in the file docker-compose.dev.yml
+docker-compose -f docker-compose.dev.yml up --build -d --remove-orphans
 # Build an image on local
 docker build --build-arg TELEGRAM_TOKEN=$(grep TELEGRAM_TOKEN .env | cut -d '=' -f2) \
              --build-arg TELEGRAM_CHAT_ID=$(grep TELEGRAM_CHAT_ID .env | cut -d '=' -f2) \
-            -t fx-golang-server .
-
+            -t golang-url-shortener .
 # Run container
-docker run -d -p 8080:8080 --name fx-golang-server-container fx-golang-server
+docker run -d -p 8080:8080 --name golang-url-shortener-container golang-url-shortener
 
 # Start container
-docker start fx-golang-server-container
+docker start golang-url-shortener-container
 ```
 ### Deployment
 #### Koyeb

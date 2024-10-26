@@ -30,7 +30,6 @@ func NewPostgresqlDatabase() (*gorm.DB, error) {
 		Password:     os.Getenv("POSTGRES_PASSWORD"),
 		Port:         os.Getenv("POSTGRES_PORT"),
 	}
-	fmt.Println("host", os.Getenv("POSTGRES_HOST"))
 	dsn := GetDatabaseDSN(dbConfig)
 	customLogger := NewCustomLogger(dbLoggerConfig{
 		ignoreRecordNotFoundError: false,
