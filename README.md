@@ -28,7 +28,7 @@ docker start golang-url-shortener-container
 #### Koyeb
 ```bash
 # create service
-koyeb app init shortener --git github.com/taintpro98/golang-url-shortener --git-branch main --git-builder docker --instance-type free --env "POSTGRES_HOST=ep-quiet-night-a4ehz4z4.us-east-1.pg.koyeb.app"
+koyeb app init shortener --git github.com/taintpro98/golang-url-shortener --git-branch main --git-builder docker --instance-type free --env "POSTGRES_HOST=ep-quiet-night-a4ehz4z4.us-east-1.pg.koyeb.app" --env "POSTGRES_PORT=5432" --env "POSTGRES_DB=koyebdb" --env "POSTGRES_USER=koyeb-adm" --env "POSTGRES_PASSWORD=[password]"
 
 # deploy with yaml file
 koyeb services deploy -f koyeb.yaml

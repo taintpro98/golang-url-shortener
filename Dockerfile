@@ -3,6 +3,7 @@ FROM golang:1.21-alpine3.18 AS builder
 
 WORKDIR /app
 
+COPY public/ ./
 COPY go.mod go.sum ./
 RUN go mod download
 
@@ -37,7 +38,6 @@ ENV PORT=8080
 RUN mkdir -p /app/config
 
 COPY --from=builder /app/cmd/app/app /app/
-COPY /app/public /app/public
 
 WORKDIR /app
 
