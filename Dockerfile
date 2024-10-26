@@ -3,13 +3,12 @@ FROM golang:1.21-alpine3.18 AS builder
 
 WORKDIR /app
 
-RUN mkdir public
-COPY public/index.html ./public/
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-
+# Ensure the public directory is copied
+COPY ./public ./public
 # Building app
 RUN cd cmd/app && CGO_ENABLED=0 GOOS=linux go build -o app
 
