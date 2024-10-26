@@ -32,7 +32,10 @@ docker start fx-golang-server-container
 #### Koyeb
 ```bash
 # create service
-koyeb app init shortener --git github.com/taintpro98/golang-url-shortener --git-branch main --git-builder docker --instance-type free --env "POSTGRES_HOST={{ secret.<POSTGRES_HOST> }}"
+koyeb app init shortener --git github.com/taintpro98/golang-url-shortener --git-branch main --git-builder docker --instance-type free --env "POSTGRES_HOST=ep-quiet-night-a4ehz4z4.us-east-1.pg.koyeb.app"
+
+# deploy with yaml file
+koyeb services deploy -f koyeb.yaml
 
 # create database
 koyeb database create shortener-db --app shortener --instance-type free --pg-version 16 --region was

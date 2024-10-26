@@ -1,0 +1,22 @@
+name: shortener
+type: service
+image:
+  name: my-docker-image:latest
+regions:
+  - was # Specify the region you want to deploy to (e.g., Washington)
+env:
+  - key: POSTGRES_HOST
+    value: secrets://POSTGRES_HOST
+  - key: POSTGRES_DB
+    value: secrets://POSTGRES_DB
+  - key: POSTGRES_USER
+    value: root
+  - key: POSTGRES_PASSWORD
+    value: secrets://POSTGRES_PASSWORD
+  - key: POSTGRES_PORT
+    value: 5432
+
+# Other optional configurations (e.g., health checks, autoscaling, etc.)
+# scaling:
+#   min_instances: 1
+#   max_instances: 5
