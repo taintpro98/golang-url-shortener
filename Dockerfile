@@ -38,6 +38,7 @@ ENV PORT=8080
 RUN mkdir -p /app/config
 
 COPY --from=builder /app/cmd/app/app /app/
+COPY --from=builder /app/public ./public
 
 WORKDIR /app
 
