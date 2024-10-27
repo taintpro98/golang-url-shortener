@@ -7,27 +7,26 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-# Ensure the public directory is copied
-# COPY ./public ./public
-# Building app
+
+RUN go build -o /bin/migration ./cmd/migration/main.go
 RUN cd cmd/app && CGO_ENABLED=0 GOOS=linux go build -o app
 
 # Final stage
 FROM alpine:3.18 as runner
 
-ARG POSTGRES_HOST
-ARG POSTGRES_DB
-ARG POSTGRES_USER
-ARG POSTGRES_PASSWORD
-ARG POSTGRES_PORT
-ARG APP_DOMAIN
+# ARG POSTGRES_HOST
+# ARG POSTGRES_DB
+# ARG POSTGRES_USER
+# ARG POSTGRES_PASSWORD
+# ARG POSTGRES_PORT
+# ARG APP_DOMAIN
 
-ENV POSTGRES_HOST $POSTGRES_HOST
-ENV POSTGRES_DB $POSTGRES_DB
-ENV POSTGRES_USER $POSTGRES_USER
-ENV POSTGRES_PASSWORD $POSTGRES_PASSWORD
-ENV POSTGRES_PORT $POSTGRES_PORT
-ENV APP_DOMAIN $APP_DOMAIN
+# ENV POSTGRES_HOST $POSTGRES_HOST
+# ENV POSTGRES_DB $POSTGRES_DB
+# ENV POSTGRES_USER $POSTGRES_USER
+# ENV POSTGRES_PASSWORD $POSTGRES_PASSWORD
+# ENV POSTGRES_PORT $POSTGRES_PORT
+# ENV APP_DOMAIN $APP_DOMAIN
 
 ENV ENV_CONFIG_ONLY=true
 ENV GIN_MODE=release
@@ -40,13 +39,16 @@ RUN mkdir -p ./config
 RUN mkdir ./cmd
 RUN mkdir ./cmd/migration
 
+COPY --from=builder /bin/migration /bin/migration
 COPY --from=builder /app/cmd/app/app ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/migrations ./migrations
-COPY --from=builder /app/cmd/migration/main.go ./cmd/migration
-RUN go run /app/cmd/migration/main.go -dir ./migrations up
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000
 
+ENTRYPOINT ["/entrypoint.sh"]
 # Run the web service on container startup.
 CMD ["/app/app"]
