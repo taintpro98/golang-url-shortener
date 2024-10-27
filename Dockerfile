@@ -38,12 +38,12 @@ WORKDIR /app
 # Tạo thư mục config nếu chưa tồn tại
 RUN mkdir -p ./config
 RUN mkdir ./cmd
-RUN mkdir ./cmd/migrations
+RUN mkdir ./cmd/migration
 
 COPY --from=builder /app/cmd/app/app ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/migrations ./migrations
-COPY --from=builder /app/cmd/migrations/main.go ./cmd/migrations
+COPY --from=builder /app/cmd/migration/main.go ./cmd/migration
 RUN go run /app/cmd/migration/main.go -dir ./migrations up
 
 EXPOSE 8000
