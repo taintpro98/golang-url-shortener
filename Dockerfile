@@ -34,13 +34,12 @@ ENV GIN_MODE=release
 ENV HOST 0.0.0.0
 ENV PORT=8080
 
-# Tạo thư mục config nếu chưa tồn tại
-RUN mkdir -p /app/config
-
-COPY --from=builder /app/cmd/app/app /app/
-COPY --from=builder /app/public ./public
-
 WORKDIR /app
+# Tạo thư mục config nếu chưa tồn tại
+RUN mkdir -p ./config
+
+COPY --from=builder /app/cmd/app/app ./
+COPY --from=builder /app/public ./public
 
 EXPOSE 8080
 
