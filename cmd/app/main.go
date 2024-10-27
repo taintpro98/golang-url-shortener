@@ -52,14 +52,14 @@ func startHttp(lc fx.Lifecycle, ctrl *controller.Controller) {
 	engine.POST("/shorten", ctrl.Short)
 
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8000",
 		Handler: engine,
 	}
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			go func() {
-				log.Info().Ctx(ctx).Msg("Running API on port :8080...")
+				log.Info().Ctx(ctx).Msg("Running API on port :8000...")
 				err := server.ListenAndServe()
 				if err != nil && !errors.Is(err, http.ErrServerClosed) {
 					log.Error().Ctx(ctx).Err(err).Msg("Run app error")
