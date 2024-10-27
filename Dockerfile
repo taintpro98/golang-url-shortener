@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 # Ensure the public directory is copied
-COPY ./public ./public
+# COPY ./public ./public
 # Building app
 RUN cd cmd/app && CGO_ENABLED=0 GOOS=linux go build -o app
 
@@ -38,6 +38,7 @@ WORKDIR /app
 # Tạo thư mục config nếu chưa tồn tại
 RUN mkdir -p ./config
 
+RUN go run /app/cmd/migration/main.go -dir migrations up
 COPY --from=builder /app/cmd/app/app ./
 COPY --from=builder /app/public ./public
 
