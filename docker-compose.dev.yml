@@ -1,6 +1,17 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  golang-server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: golang-server
+    env_file:
+      - .env
+    ports:
+      - 8000:8000
+    networks:
+      - url-shorten-network
   database:
     container_name: url-shortener-database
     image: postgres:14.1

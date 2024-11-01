@@ -43,6 +43,20 @@ COPY --from=builder /bin/migration /bin/migration
 COPY --from=builder /app/cmd/app/app ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/migrations ./migrations
+# COPY --from=builder /app/.env ./
+ARG POSTGRES_HOST
+ARG POSTGRES_DB
+ARG POSTGRES_USER
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_PORT
+ARG APP_DOMAIN
+
+ENV POSTGRES_HOST $POSTGRES_HOST
+ENV POSTGRES_DB $POSTGRES_DB
+ENV POSTGRES_USER $POSTGRES_USER
+ENV POSTGRES_PASSWORD $POSTGRES_PASSWORD
+ENV POSTGRES_PORT $POSTGRES_PORT
+ENV APP_DOMAIN $APP_DOMAIN
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -3,11 +3,12 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"golang-url-shortener/config"
 	"golang-url-shortener/pkg/database"
 	"os"
 
-	"log"
+	"github.com/rs/zerolog/log"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/joho/godotenv"
@@ -17,7 +18,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Panic(err)
+		log.Warn().Err(err).Msg("No .env file")
 	}
 
 	dir := flag.String("dir", "migrations", "Path to migrations")
@@ -36,11 +37,11 @@ func main() {
 	dsn := database.GetDatabaseDSN(dbConfig)
 	db, err := goose.OpenDBWithDriver("postgres", dsn)
 	if err != nil {
-		log.Fatal(err)
+		log.Warn().Err(err).Msg("open db error")
 	}
 	defer func() {
 		if err := db.Close(); err != nil {
-			log.Fatalf("goose: failed to close DB: %v\n", err)
+			log.Warn().Err(err).Msg("goose: failed to close DB")
 		}
 	}()
 
@@ -50,6 +51,6 @@ func main() {
 	}
 
 	if err := goose.RunContext(ctx, command, db, *dir, arguments...); err != nil {
-		log.Fatalf("goose %v: %v", command, err)
+		log.Warn().Err(err).Msg(fmt.Sprintf("goose %v: %v", command, err))
 	}
 }
